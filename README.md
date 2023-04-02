@@ -1,2 +1,2 @@
 # flovers
-2D Top down view game for your crush.
+2D Top down game for your crush.
