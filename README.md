@@ -1,2 +1,2 @@
 # flovers
-2D Top down game for my crush.
+2D Top down RPG game.
