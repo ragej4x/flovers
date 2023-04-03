@@ -47,13 +47,15 @@ while loop == True:
     keyinput = pg.key.get_pressed()
     window.fill(0)
     display.fill((30,30,30))
+
+
     #display.blit(bg, (0 - bulk.camera.cameraX ,0 - bulk.camera.cameraY))
-    
+    bulk.player.hitbox(pg, display)
+    map.updateMap(pg, display)
 
     bulk.player.mvControls(pg, display, keyinput)
     bulk.player.updatePlayerAnimation(pg, display, keyinput)
     bulk.camera.update(pg, display, keyinput)
 
-    map.testMap(pg, display)
 
     eventHandler()
