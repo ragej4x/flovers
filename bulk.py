@@ -7,6 +7,8 @@ from data import mapid
 #PLAYER
 class playerClass():
     def __init__(self):
+        self.showHitbox = True
+
         self.x = 100
         self.y = 100
 
@@ -16,14 +18,22 @@ class playerClass():
         self.down = False
 
         self.playerSpeed = 2
-
-
-    def mvControls(self, pg, display, keyinput):
-        self.fixedHitBox = pg.draw.rect(display, (100,100,200), (self.x - camera.cameraX , self.y - camera.cameraY - 13, 13,10))
-        self.hitBox = pg.draw.rect(display, (200,100,100), (self.x - camera.cameraX , self.y - camera.cameraY, 13,10))
+        
         self.dx = 0
         self.dy = 0
 
+    def hitbox(self, pg, display):
+        self.fixedHitBox = pg.Rect((self.x - camera.cameraX , self.y - camera.cameraY - 13, 13,10))
+        self.hitBox = pg.Rect((self.x - camera.cameraX , self.y - camera.cameraY, 13,10))  
+
+
+        if self.showHitbox == True:
+            pg.draw.rect(display, (100,100,200), (self.fixedHitBox))
+            pg.draw.rect(display, (100,100,200), (self.hitBox))
+
+    def mvControls(self, pg, display, keyinput):
+        self.dx = 0
+        self.dy = 0
 
         #MOVEMENT
         if keyinput[pg.K_a]:
@@ -168,16 +178,54 @@ camera = cameraClass()
 
 class mapClass():
     def __init__(self, pg) -> None:
-        pass
+        self.showGrid = True
+    
+        #TILES
+        self.stoneTile1 = pg.image.load("data/bin/texture/tile1.png")
+        self.stoneTile2 = pg.image.load("data/bin/texture/tile2.png")
+        self.stoneTile3 = pg.image.load("data/bin/texture/tile3.png")
+        self.stoneTile4 = pg.image.load("data/bin/texture/tile4.png")
+        self.stoneTile5 = pg.image.load("data/bin/texture/tile5.png")
+        self.stoneTile6 = pg.image.load("data/bin/texture/tile6.png")
 
-    def testMap(self, pg, display):
+
+        self.curvedTopLeft = pg.image.load("data/bin/texture/curvedTileLeft.png")
+        self.curvedTopRight = pg.image.load("data/bin/texture/curvedTileRight.png")
+        self.curvedDownLeft = pg.image.load("data/bin/texture/curvedTileDownLeft.png")
+        self.curvedDownRight = pg.image.load("data/bin/texture/curvedTileDownRight.png")
+
+
+    def updateMap(self, pg, display):
         y = 0
         for i in mapid.mapdata.testMapData:
             x = 0
             for tile in i:
                 x += 1
+
+                #STONE TILE
                 if tile == 1:
-                    block = pg.draw.rect(display, (255,255,255), (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+                    display.blit(self.stoneTile1, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 2:
+                    display.blit(self.stoneTile2, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 3:
+                    display.blit(self.stoneTile3, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 4:
+                    display.blit(self.stoneTile4, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 5:
+                    display.blit(self.stoneTile5, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 6:
+                    display.blit(self.stoneTile6, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+
+                if tile == -1:
+                    block = pg.Rect(x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16)
+                    if self.showGrid == True:
+                        pg.draw.rect(display, (255, 0, 255), (block), 1)
                     
                     #BLOCK COLLITION FOR X
                     if block.colliderect(player.hitBox.x + player.dx, player.hitBox.y, player.hitBox.width, player.hitBox.height):

@@ -5,7 +5,7 @@
 -physics for blocks colliders/
 -map colliders/
 -animation/
--textures
+-textures/
 -map
 
 #CODE ID'S
