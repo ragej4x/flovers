@@ -1,5 +1,7 @@
 import pygame as pg
 import bulk
+from functools import wraps
+import sys
 pg.init()
 
 
@@ -16,6 +18,25 @@ clock = pg.time.Clock()
 loop = True
 bg = pg.image.load("data/bg.jpg")
 
+#OPTIMIZATION
+
+
+def memoize(func):
+    cashe = {}
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        key = str(args) + str(kwargs)
+
+        if key not in cashe:
+            cashe[key] = func(*args, **kwargs)
+        
+        return cashe[key]
+
+
+    return wrapper
+
+
 #ID1
 def frameRate():
     font = pg.font.Font("data/bin/font", 18)
@@ -24,6 +45,8 @@ def frameRate():
     window.blit(fpsText, (2,2))
 #ID2
 #EVENT HANDLER
+
+
 def eventHandler():
     global loop
     for event in pg.event.get():
@@ -36,14 +59,15 @@ def eventHandler():
 
     frameRate()
     pg.display.flip()
-    clock.tick(61)
+    clock.tick(60)
 
 
 #MAP
 map = bulk.mapClass(pg)
 
 #ID3
-while loop == True:
+
+while loop:
     keyinput = pg.key.get_pressed()
     window.fill(0)
     display.fill((30,30,30))
@@ -57,5 +81,5 @@ while loop == True:
     bulk.player.updatePlayerAnimation(pg, display, keyinput)
     bulk.camera.update(pg, display, keyinput)
 
-
     eventHandler()
+
