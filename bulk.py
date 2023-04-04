@@ -112,8 +112,7 @@ class playerClass():
 
         elif not keyinput[pg.K_s] and self.down == True:
             animate.idleDownAnimation(pg, display)
-          
-
+        
 
         if keyinput[pg.K_a] and self.left == True:
             animate.walkLeftAnimation(pg, display)
@@ -130,6 +129,7 @@ class playerClass():
         elif keyinput[pg.K_s] and self.down == True:
             animate.walkDownAnimation(pg, display)
             pass
+
 
 
 player = playerClass()
@@ -195,6 +195,27 @@ class mapClass():
         self.curvedDownRight = pg.image.load("data/bin/texture/curvedTileDownRight.png")
 
 
+        self.grassTile1 = pg.image.load("data/bin/texture/grassTile1.png")
+        self.grassTile2 = pg.image.load("data/bin/texture/grassTile2.png")
+        self.grassTile3 = pg.image.load("data/bin/texture/grassTile3.png")
+        self.grassTile4 = pg.image.load("data/bin/texture/grassTile4.png")
+        self.grassTile5 = pg.image.load("data/bin/texture/grassTile5.png")
+        self.grassTile6 = pg.image.load("data/bin/texture/grassTile6.png")
+
+
+        self.roadCurvedLeft = pg.image.load("data/bin/texture/roadCurvedLeft.png")
+        self.roadCurvedRight = pg.image.load("data/bin/texture/roadCurvedLeft.png")
+        self.roadVertical = pg.image.load("data/bin/texture/roadVertical.png")
+        self.roadHorizontal = pg.image.load("data/bin/texture/roadHorizontal.png")
+        self.roadCurvedBottomLeft = pg.image.load("data/bin/texture/roadCurvedBottomLeft.png")
+        self.roadCurvedBottomRight = pg.image.load("data/bin/texture/roadCurvedBottomRight.png")
+
+        #OBJECTS
+        self.cone = pg.image.load("data/bin/texture/cone.png")
+        self.bin = pg.image.load("data/bin/texture/bin.png")
+        self.manHole = pg.image.load("data/bin/texture/manHole.png")
+
+
     def updateMap(self, pg, display):
         y = 0
         for i in mapid.mapdata.testMapData:
@@ -221,6 +242,58 @@ class mapClass():
                 if tile == 6:
                     display.blit(self.stoneTile6, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
 
+
+                #GRASS TILE
+                if tile == 7:
+                    display.blit(self.grassTile1, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 8:
+                    display.blit(self.grassTile2, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 9:
+                    display.blit(self.grassTile3, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 10:
+                    display.blit(self.grassTile4, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 11:
+                    display.blit(self.grassTile5, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 12:
+                    display.blit(self.grassTile6, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+
+                #ROAD TILE
+                if tile == 13:
+                    display.blit(self.roadCurvedBottomRight, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 14:
+                    display.blit(self.roadCurvedBottomLeft, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 15:
+                    display.blit(self.roadCurvedLeft, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 16:
+                    display.blit(self.roadCurvedRight, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 17:
+                    display.blit(self.roadHorizontal, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 18:
+                    display.blit(self.roadVertical, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+
+                #OBJECT
+                if tile == 19:
+                    display.blit(self.cone, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 20:
+                    display.blit(self.bin, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                if tile == 21:
+                    display.blit(self.manHole, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+
+                #COLLIDER
 
                 if tile == -1:
                     block = pg.Rect(x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16)
@@ -266,96 +339,107 @@ class animationClass():
         self.idlDownList = []
 
 
-        self.idlRightframeCount = 0
-        self.idlLeftframeCount = 0
-        self.idlUpframeCount = 0
-        self.idlDownframeCount = 0
+        self.idlRightframeCount = 1
+        self.idlLeftframeCount = 1
+        self.idlUpframeCount = 1
+        self.idlDownframeCount = 1
 
         self.wRightList = []
         self.wLeftList = []
         self.wUpList = []
         self.wDownList = []
 
-        self.wLeftframeCount = 0
-        self.wRightframeCount = 0
-        self.wUpframeCount = 0
-        self.wDownframeCount = 0
+        self.wLeftframeCount = 1
+        self.wRightframeCount = 1
+        self.wUpframeCount = 1
+        self.wDownframeCount = 1
 
 
-        self.idlframeSpeed = 0.01
-        self.wframeSpeed = 0.03
+        self.idlframeSpeed = 0.05
+        self.wframeSpeed = 0.2
 
+
+    
     #IDLE
     def idleLeftAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/id{frame}.anim")
-            image = pg.transform.flip(image, True, False)
-            image.set_colorkey((255,0,255))
-            self.idlLeftList.append(image)
-            display.blit(self.idlLeftList[int(self.idlLeftframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.idlLeftframeCount += self.idlframeSpeed
+        image = pg.image.load(f"data/bin/anim/id{int(self.idlRightframeCount)}.anim")
+        image = pg.transform.flip(image, True, False)
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
 
+        self.idlRightframeCount += self.idlframeSpeed
+        if self.idlRightframeCount > 6:
+            self.idlRightframeCount  = 1
 
     def idleRightAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/id{frame}.anim")
-            image.set_colorkey((255,0,255))
-            self.idlRightList.append(image)
-            display.blit(self.idlRightList[int(self.idlRightframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.idlRightframeCount += self.idlframeSpeed
+        image = pg.image.load(f"data/bin/anim/id{int(self.idlLeftframeCount)}.anim")
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
+
+        self.idlLeftframeCount += self.idlframeSpeed
+        if self.idlLeftframeCount > 6:
+            self.idlLeftframeCount  = 1
 
 
     def idleUpAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/idU{frame}.anim")
-            image.set_colorkey((255,0,255))
-            self.idlUpList.append(image)
-            display.blit(self.idlUpList[int(self.idlUpframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.idlUpframeCount += self.idlframeSpeed
+        image = pg.image.load(f"data/bin/anim/idU{int(self.idlDownframeCount)}.anim")
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
 
+        self.idlDownframeCount += self.idlframeSpeed
+        if self.idlDownframeCount > 6:
+            self.idlDownframeCount  = 1
 
     def idleDownAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/idD{frame}.anim")
-            image.set_colorkey((255,0,255))
-            self.idlDownList.append(image)
-            display.blit(self.idlDownList[int(self.idlDownframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.idlDownframeCount += self.idlframeSpeed
+        image = pg.image.load(f"data/bin/anim/idD{int(self.idlUpframeCount)}.anim")
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
 
+        self.idlUpframeCount += self.idlframeSpeed
+        if self.idlUpframeCount > 6:
+            self.idlUpframeCount  = 1
+        
 
     #WALK
     def walkLeftAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/r{frame}.anim")
-            image = pg.transform.flip(image, True, False)
-            image.set_colorkey((255,0,255))
-            self.wLeftList.append(image)
-            display.blit(self.wLeftList[int(self.wLeftframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.wLeftframeCount += self.wframeSpeed
+        image = pg.image.load(f"data/bin/anim/r{int(self.wLeftframeCount)}.anim")
+        image = pg.transform.flip(image, True, False)
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
+
+        self.wLeftframeCount += self.wframeSpeed
+        if self.wLeftframeCount > 6:
+            self.wLeftframeCount = 1
 
 
     def walkRightAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/r{frame}.anim")
-            image.set_colorkey((255,0,255))
-            self.wRightList.append(image)
-            display.blit(self.wRightList[int(self.wRightframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.wRightframeCount += self.wframeSpeed
+        image = pg.image.load(f"data/bin/anim/r{int(self.wRightframeCount)}.anim")
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
+
+        self.wRightframeCount += self.wframeSpeed
+        if self.wRightframeCount > 6:
+            self.wRightframeCount = 1
+
 
     def walkUpAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/rU{frame}.anim")
-            image.set_colorkey((255,0,255))
-            self.wUpList.append(image)
-            display.blit(self.wUpList[int(self.wUpframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.wUpframeCount += self.wframeSpeed
+        image = pg.image.load(f"data/bin/anim/rU{int(self.wUpframeCount)}.anim")
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
+
+        self.wUpframeCount += self.wframeSpeed
+        if self.wUpframeCount > 6:
+            self.wUpframeCount = 1
 
     def walkDownAnimation(self, pg, display):
-        for frame in range(1, 6 + 1):
-            image = pg.image.load(f"data/bin/anim/rD{frame}.anim")
-            image.set_colorkey((255,0,255))
-            self.wDownList.append(image)
-            display.blit(self.wDownList[int(self.wDownframeCount)], (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
-            self.wDownframeCount += self.wframeSpeed
+
+        image = pg.image.load(f"data/bin/anim/rD{int(self.wDownframeCount)}.anim")
+        image.set_colorkey((255,0,255))
+        display.blit(image, (player.x - camera.cameraX , player.y - 22 - camera.cameraY))
+
+        self.wDownframeCount += self.wframeSpeed
+        if self.wDownframeCount > 6:
+            self.wDownframeCount  = 1
+            
 
 animate = animationClass()
