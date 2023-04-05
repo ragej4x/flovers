@@ -1,7 +1,7 @@
 import math
 import random
-from data import mapid
-
+import csv
+import os 
 
 #CLASSID20
 #PLAYER
@@ -174,12 +174,18 @@ class cameraClass():
 
 camera = cameraClass()
 
-#MAP
 
+#MAP
+import json
 class mapClass():
     def __init__(self, pg) -> None:
         self.showGrid = True
-    
+        self.texture = pg.image.load("data/bin/texture/street.png")
+
+
+        """
+        
+
         #TILES
         self.stoneTile1 = pg.image.load("data/bin/texture/tile1.png")
         self.stoneTile2 = pg.image.load("data/bin/texture/tile2.png")
@@ -215,114 +221,343 @@ class mapClass():
         self.bin = pg.image.load("data/bin/texture/bin.png")
         self.manHole = pg.image.load("data/bin/texture/manHole.png")
 
+        """
+
+        #LENGTH OF A TEXTURE
+        self.tileLength = self.texture.get_width()
+        
+        #SURFACE OF A TILE TO RENDER
+        self.tile = pg.Surface((16,16))
+
+        #RENDER IN ONE IMAGE
+        self.renderMap = pg.Surface((1024//3,620//3)) #OPTIMIZATION
 
     def updateMap(self, pg, display):
-        y = 0
-        for i in mapid.mapdata.testMapData:
-            x = 0
-            for tile in i:
-                x += 1
-
-                #STONE TILE
-                if tile == 1:
-                    display.blit(self.stoneTile1, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 2:
-                    display.blit(self.stoneTile2, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 3:
-                    display.blit(self.stoneTile3, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 4:
-                    display.blit(self.stoneTile4, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 5:
-                    display.blit(self.stoneTile5, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 6:
-                    display.blit(self.stoneTile6, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
+        self.renderMap.fill(0)
+        #self.tile.fill(0)
 
 
-                #GRASS TILE
-                if tile == 7:
-                    display.blit(self.grassTile1, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
 
-                if tile == 8:
-                    display.blit(self.grassTile2, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 9:
-                    display.blit(self.grassTile3, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 10:
-                    display.blit(self.grassTile4, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 11:
-                    display.blit(self.grassTile5, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 12:
-                    display.blit(self.grassTile6, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-
-                #ROAD TILE
-                if tile == 13:
-                    display.blit(self.roadCurvedBottomRight, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 14:
-                    display.blit(self.roadCurvedBottomLeft, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 15:
-                    display.blit(self.roadCurvedLeft, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 16:
-                    display.blit(self.roadCurvedRight, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 17:
-                    display.blit(self.roadHorizontal, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 18:
-                    display.blit(self.roadVertical, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-
-                #OBJECT
-                if tile == 19:
-                    display.blit(self.cone, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 20:
-                    display.blit(self.bin, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                if tile == 21:
-                    display.blit(self.manHole, (x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16))
-
-                #COLLIDER
-
-                if tile == -1:
-                    block = pg.Rect(x * 16 - camera.cameraX , y * 16 - camera.cameraY , 16,16)
-                    if self.showGrid == True:
-                        pg.draw.rect(display, (255, 0, 255), (block), 1)
-                    
-                    #BLOCK COLLITION FOR X
-                    if block.colliderect(player.hitBox.x + player.dx, player.hitBox.y, player.hitBox.width, player.hitBox.height):
-                        player.dx = 0
-
-                    #BLOCK COLLITION FOR Y
-                    if block.colliderect(player.hitBox.x, player.hitBox.y + player.dy, player.hitBox.width, player.hitBox.height):
-                        player.dy = 0
+        with open("data/level0_data.csv") as data:
             
-                    
-                    #FIXED BLOCK COLLITION FOR X
-                    if block.colliderect(player.fixedHitBox.x + player.dx, player.fixedHitBox.y, player.fixedHitBox.width, player.fixedHitBox.height):
-                        player.dx = 0
+            #self.tile.fill(0)
+            csv_reader = csv.reader(data, delimiter=',')
+            y = 0
+            for row in csv_reader:
+                
+                x = 0
+                for column in range(len(row)):
+                    x += 1
 
-                    #FIXED BLOCK COLLITION FOR Y
-                    if block.colliderect(player.fixedHitBox.x, player.fixedHitBox.y + player.dy, player.fixedHitBox.width, player.fixedHitBox.height):
-                        player.dy = 0      
-            
-            y += 1
+                    #SKIP 1 NUM EXAMPLE 17 JUMP TO 19
+                    #BECAUSE THE COLUMN STARTS WITH 0
+                    
+
+
+                    #IF THE TILE IS IN THE ROW THEN WE RENDERING IT
+                    
+                    if row[column] == "1":
+                        self.tile.blit(self.texture,(0,0))
+
+                    elif row[column] == "2":
+                        self.tile.blit(self.texture,(-16,0))
+
+                    elif row[column] == "3":
+                        self.tile.blit(self.texture,(-16 * 2 , 0))
+
+                    elif row[column] == "4":
+                        self.tile.blit(self.texture,(-16 * 3 ,0))
+
+                    elif row[column] == "5":
+                        self.tile.blit(self.texture,(-16 * 4 ,0))
+
+                    elif row[column] == "6":
+                        self.tile.blit(self.texture,(-16 * 5 ,0))
+
+                    elif row[column] == "7":
+                        self.tile.blit(self.texture,(-16 * 6 ,0))
+
+                    elif row[column] == "8":
+                        self.tile.blit(self.texture,(-16 * 7 ,0))
+
+                    elif row[column] == "9":
+                        self.tile.blit(self.texture,(-16 * 8 ,0))
+
+                    elif row[column] == "10":
+                        self.tile.blit(self.texture,(-16 * 9 ,0))
+
+                    elif row[column] == "11":
+                        self.tile.blit(self.texture,(-16 * 10 ,0))
+
+                    elif row[column] == "12":
+                        self.tile.blit(self.texture,(-16 * 11 ,0))
+
+                    elif row[column] == "13":
+                        self.tile.blit(self.texture,(-16 * 12 ,0))
+
+                    elif row[column] == "14":
+                        self.tile.blit(self.texture,(-16 * 13 ,0))
+
+                    elif row[column] == "15":
+                        self.tile.blit(self.texture,(-16 * 14 ,0))
+
+
+
+                    elif row[column] == "17":
+                        self.tile.blit(self.texture,(0 ,-16))
+                    
+                    elif row[column] == "18":
+                        self.tile.blit(self.texture,(-16 , - 16))
+
+                    elif row[column] == "19":
+                        self.tile.blit(self.texture,(-16 * 2 , - 16))
+                    
+                    elif row[column] == "20":
+                        self.tile.blit(self.texture,(-16 * 3 ,-16))
+                    
+                    elif row[column] == "21":
+                        self.tile.blit(self.texture,(-16 * 4 ,-16))
+
+                    elif row[column] == "22":
+                        self.tile.blit(self.texture,(-16 * 5 ,- 16))
+
+                    elif row[column] == "23":
+                        self.tile.blit(self.texture,(-16 * 6 , - 16))
+
+                    elif row[column] == "24":
+                        self.tile.blit(self.texture,(-16 * 7 , - 16))
+
+                    elif row[column] == "25":
+                        self.tile.blit(self.texture,(-16 * 8 , - 16))
+
+                    elif row[column] == "26":
+                        self.tile.blit(self.texture,(-16 * 9 , - 16))
+
+                    elif row[column] == "27":
+                        self.tile.blit(self.texture,(-16 * 10 , - 16))
+
+                    elif row[column] == "28":
+                        self.tile.blit(self.texture,(-16 * 11 , - 16))
+
+                    elif row[column] == "29":
+                        self.tile.blit(self.texture,(-16 * 12 , - 16))
+
+                    elif row[column] == "30":
+                        self.tile.blit(self.texture,(-16 * 13 , - 16))
+
+                    elif row[column] == "31":
+                        self.tile.blit(self.texture,(-16 * 14 , - 16))
+
+
+
+                    elif row[column] == "33":
+                        self.tile.blit(self.texture,(0  , - 16 * 2))
+
+                    elif row[column] == "34":
+                        self.tile.blit(self.texture,(-16  , - 16 * 2))
+
+                    elif row[column] == "35":
+                        self.tile.blit(self.texture,(-16 * 2 , - 16 * 2))
+
+                    elif row[column] == "36":
+                        self.tile.blit(self.texture,(-16 * 3 , - 16 * 2))
+
+                    elif row[column] == "37":
+                        self.tile.blit(self.texture,(-16 * 4 , - 16 * 2))
+
+                    elif row[column] == "38":
+                        self.tile.blit(self.texture,(-16 * 5 , - 16 * 2))
+
+                    elif row[column] == "39":
+                        self.tile.blit(self.texture,(-16 * 6 , - 16 * 2))
+
+                    elif row[column] == "40":
+                        self.tile.blit(self.texture,(-16 * 7 , - 16 * 2))
+
+                    elif row[column] == "41":
+                        self.tile.blit(self.texture,(-16 * 8 , - 16 * 2))
+
+                    elif row[column] == "42":
+                        self.tile.blit(self.texture,(-16 * 9 , - 16 * 2))
+
+                    elif row[column] == "43":
+                        self.tile.blit(self.texture,(-16 * 10 , - 16 * 2))
+
+                    elif row[column] == "44":
+                        self.tile.blit(self.texture,(-16 * 11 , - 16 * 2))
+
+                    elif row[column] == "45":
+                        self.tile.blit(self.texture,(-16 * 12 , - 16 * 2))
+
+                    elif row[column] == "46":
+                        self.tile.blit(self.texture,(-16 * 13 , - 16 * 2))
+
+                    elif row[column] == "47":
+                        self.tile.blit(self.texture,(-16 * 14 , - 16 * 2))
+
+
+
+                    elif row[column] == "49":
+                        self.tile.blit(self.texture,(0 , - 16 * 3))
+
+                    elif row[column] == "50":
+                        self.tile.blit(self.texture,(-16 , - 16 * 3))
+
+                    elif row[column] == "51":
+                        self.tile.blit(self.texture,(-16 * 2 , - 16 * 3))
+
+                    elif row[column] == "52":
+                        self.tile.blit(self.texture,(-16 * 3 , - 16 * 3))
+
+                    elif row[column] == "53":
+                        self.tile.blit(self.texture,(-16 * 4 , - 16 * 3))
+
+                    elif row[column] == "54":
+                        self.tile.blit(self.texture,(-16 * 5 , - 16 * 3))
+
+                    elif row[column] == "55":
+                        self.tile.blit(self.texture,(-16 * 6 , - 16 * 3))
+
+                    elif row[column] == "56":
+                        self.tile.blit(self.texture,(-16 * 7 , - 16 * 3))
+
+                    elif row[column] == "57":
+                        self.tile.blit(self.texture,(-16 * 8 , - 16 * 3))
+                    
+                    elif row[column] == "58":
+                        self.tile.blit(self.texture,(-16 * 9 , - 16 * 3))
+
+                    elif row[column] == "59":
+                        self.tile.blit(self.texture,(-16 * 10 , - 16 * 3))
+
+                    elif row[column] == "60":
+                        self.tile.blit(self.texture,(-16 * 11 , - 16 * 3))
+
+                    elif row[column] == "61":
+                        self.tile.blit(self.texture,(-16 * 12 , - 16 * 3))
+
+                    elif row[column] == "62":
+                        self.tile.blit(self.texture,(-16 * 13 , - 16 * 3))
+                    
+                    elif row[column] == "63":
+                        self.tile.blit(self.texture,(-16 * 14 , - 16 * 3))
+
+
+
+
+                    elif row[column] == "65":
+                        self.tile.blit(self.texture,(0  , - 16 * 4))
+
+                    elif row[column] == "66":
+                        self.tile.blit(self.texture,(-16  , - 16 * 4))
+
+                    elif row[column] == "67":
+                        self.tile.blit(self.texture,(-16 * 2 , - 16 * 4))
+
+                    elif row[column] == "68":
+                        self.tile.blit(self.texture,(-16 * 3, - 16 * 4))
+
+                    elif row[column] == "69":
+                        self.tile.blit(self.texture,(-16 * 4 , - 16 * 4))
+
+                    elif row[column] == "70":
+                        self.tile.blit(self.texture,(-16 * 5 , - 16 * 4))
+
+                    elif row[column] == "71":
+                        self.tile.blit(self.texture,(-16 * 6 , - 16 * 4))
+
+                    elif row[column] == "72":
+                        self.tile.blit(self.texture,(-16 * 7 , - 16 * 4))
+
+                    elif row[column] == "73":
+                        self.tile.blit(self.texture,(-16 * 8 , - 16 * 4))
+
+                    elif row[column] == "74":
+                        self.tile.blit(self.texture,(-16 * 9 , - 16 * 4))
+
+                    elif row[column] == "75":
+                        self.tile.blit(self.texture,(-16 * 10 , - 16 * 4))
+
+                    elif row[column] == "76":
+                        self.tile.blit(self.texture,(-16 * 11 , - 16 * 4))
+
+                    elif row[column] == "77":
+                        self.tile.blit(self.texture,(-16 * 12 , - 16 * 4))
+
+                    elif row[column] == "78":
+                        self.tile.blit(self.texture,(-16 * 13 , - 16 * 4))
+
+                    elif row[column] == "79":
+                        self.tile.blit(self.texture,(-16 * 14 , - 16 * 4))
+
+
+
+                    elif row[column] == "81":
+                        self.tile.blit(self.texture,(0 , -16 * 5))
+
+                    elif row[column] == "82":
+                        self.tile.blit(self.texture,(-16 , -16 * 5))
+
+                    elif row[column] == "83":
+                        self.tile.blit(self.texture,(-16 * 2 , -16 * 5))
+
+                    elif row[column] == "84":
+                        self.tile.blit(self.texture,(-16 * 3 , -16 * 5))
+
+                    elif row[column] == "85":
+                        self.tile.blit(self.texture,(-16 * 4 , -16 * 5))
+
+                    elif row[column] == "86":
+                        self.tile.blit(self.texture,(-16 * 5 , -16 * 5))
+
+                    elif row[column] == "87":
+                        self.tile.blit(self.texture,(-16 * 6 , -16 * 5))
+
+                    elif row[column] == "88":
+                        self.tile.blit(self.texture,(-16 * 7 , -16 * 5))
+
+                    elif row[column] == "89":
+                        self.tile.blit(self.texture,(-16 * 8 , -16 * 5))
+
+                    elif row[column] == "90":
+                        self.tile.blit(self.texture,(-16 * 9 , -16 * 5))
+
+                    elif row[column] == "91":
+                        self.tile.blit(self.texture,(-16 * 10 , -16 * 5))
+
+                    elif row[column] == "92":
+                        self.tile.blit(self.texture,(-16 * 11 , -16 * 5))
+
+                    elif row[column] == "93":
+                        self.tile.blit(self.texture,(-16 * 12 , -16 * 5))
+
+                    elif row[column] == "94":
+                        self.tile.blit(self.texture,(-16 * 13 , -16 * 5))
+
+                    elif row[column] == "95":
+                        self.tile.blit(self.texture,(-16 * 14 , -16 * 5))
+
+
+                    #print(-16 * 10)
+
+
+                    
+
+                    self.renderMap.blit(self.tile,(x * 16 - camera.cameraX, y * 16 - camera.cameraY))
+
+                y += 1
+                
+
             
         player.x += player.dx
         player.y += player.dy
 
-        #print(camera.cameraY , player.y)
+        display.blit(self.renderMap,(0,0))
+
+
+
+        
+
 
 #map = mapClass()
 
